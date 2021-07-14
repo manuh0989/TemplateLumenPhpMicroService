@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Autor extends Model
+class Example extends Model
 {
     use HasFactory;
 
-    protected $table = "autores";
-    protected $primaryKey = "id_autor";
+    protected $table = "examples";
+    protected $primaryKey = "id_example";
 
     /**
      * The attributes that are mass assignable.

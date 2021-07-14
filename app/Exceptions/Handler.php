@@ -59,9 +59,7 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable  $exception)
     {
         
-        if (!env('APP_DEBUG', false)) {
-            return $this->errorResponse('Error inesperado, intente de nuevo', Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
+
 
         if ($exception instanceof Error) {
             $errors = $exception->getMessage();
@@ -105,6 +103,10 @@ class Handler extends ExceptionHandler
         if ($exception instanceof \PDOException) {
             $errors = $exception->getMessage();
             return $this->errorResponse($errors, Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        if (!env('APP_DEBUG', false)) {
+            return $this->errorResponse('Error inesperado, intente de nuevo', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
 

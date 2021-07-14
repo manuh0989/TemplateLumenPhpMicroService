@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Autor;
+use App\Models\Example;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ExampleFactory extends Factory
@@ -12,7 +12,7 @@ class ExampleFactory extends Factory
      *
      * @var string
      */
-    protected $model = Autor::class;
+    protected $model = Example::class;
 
     /**
      * Define the model's default state.

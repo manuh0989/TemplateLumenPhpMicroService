@@ -2,18 +2,20 @@
 
 namespace App\Exceptions;
 
-use Throwable;
+use Error;
 use Exception;
+use Throwable;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Response;
 use Illuminate\Database\QueryException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Contracts\Container\BindingResolutionException;
 
 class Handler extends ExceptionHandler
 {
@@ -58,7 +60,17 @@ class Handler extends ExceptionHandler
     {
         
         if (!env('APP_DEBUG', false)) {
-            return $this->errorResponse('Error inesperado, intene de nuevo', Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->errorResponse('Error inesperado, intente de nuevo', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        if ($exception instanceof Error) {
+            $errors = $exception->getMessage();
+            return $this->errorResponse($errors, Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        
+        if ($exception instanceof BindingResolutionException) {
+            $errors = $exception->getMessage();
+            return $this->errorResponse($errors, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         if ($exception instanceof QueryException) {
@@ -92,12 +104,11 @@ class Handler extends ExceptionHandler
 
         if ($exception instanceof \PDOException) {
             $errors = $exception->getMessage();
-            print_r($exception); exit;
             return $this->errorResponse($errors, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
 
-        return $this->errorResponse('Error inesperado, intene de nuevo',Response::HTTP_INTERNAL_SERVER_ERROR);
+        return $this->errorResponse('Error inesperado, intente de nuevo',Response::HTTP_INTERNAL_SERVER_ERROR);
         
     }
 }
